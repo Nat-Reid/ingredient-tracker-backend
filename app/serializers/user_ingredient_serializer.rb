@@ -1,3 +1,4 @@
 class UserIngredientSerializer < ActiveModel::Serializer
-  attributes :id
+  attributes :id, :expiration_date, :quantity
+  belongs_to :ingredient
 end
