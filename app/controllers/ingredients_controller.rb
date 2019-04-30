@@ -7,9 +7,9 @@ class IngredientsController < ApplicationController
   end
 
   def find
-    @ingredient = Ingredient.find_by(name: params[:ingredient_name])
-    if @ingredient
-      render json: @ingredient
+    @matching_ingredients = Ingredient.where("ingredients.name  ~= ?", params[:ingredient_name])
+    if !@matching_ingredients.blank?
+      render json: @matching_ingredients
     else
       render json: ingredient_request
     end
