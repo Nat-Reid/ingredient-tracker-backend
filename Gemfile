@@ -19,6 +19,7 @@ gem 'active_model_serializers', '~> 0.10.0'
 gem "jwt", "~> 2.1"
 gem 'httparty', ">= 0.16.4"
 gem 'dotenv-rails'
+gem 'unirest'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
