@@ -14,6 +14,6 @@ module Concerns::SpoonacularHelper
   end
 
   def create_ingredient(ingredient_hash)
-    Ingredient.create(name: ingredient["name"], id: ingredient["id"])
+    Ingredient.find_or_create_by(name: ingredient["name"], id: ingredient["id"])
   end
 end
