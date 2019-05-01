@@ -13,7 +13,7 @@ class IngredientsController < ApplicationController
     if !@ingredient
       @matching_ingredients = Ingredient.where("ingredients.name  ~* ?", params[:ingredient_name].downcase)
       if @matching_ingredients.blank?
-        render json: ingredient_request #from SpoonacularHelper
+        render json: ingredient_request(params[:ingredient_name]) #from SpoonacularHelper
       else
         render json: @matching_ingredients, each_serialzer: IngredientSerializer
       end
