@@ -11,12 +11,12 @@ class IngredientsController < ApplicationController
   def find
     @ingredient = Ingredient.find_by(name: params[:ingredient_name])
     if !@ingredient
-      @matching_ingredients = Ingredient.where("ingredients.name  LIKE ?", params[:ingredient_name].downcase)
-      if @matching_ingredients.blank?
-        render ingredient_request(params[:ingredient_name]) #from SpoonacularHelper
-      else
+      @matching_ingredients = Ingredient.where("ingredients.name  ~ ?", params[:ingredient_name].downcase)
+      # if @matching_ingredients.blank?
+      #   render ingredient_request(params[:ingredient_name]) #from SpoonacularHelper
+      # else
         render json: @matching_ingredients, each_serialzer: IngredientSerializer
-      end
+      # end
     else
       render json: [IngredientSerializer.new(@ingredient)]
     end

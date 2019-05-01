@@ -1,7 +1,7 @@
 module Concerns::SpoonacularHelper
   def ingredient_request(ingredient_name)
     if (ingredient_name.match(/^[a-z ]+$/))
-      byebug
+      puts 'HITTING API HITTING API HITTING API'
       response = Unirest.get "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/food/ingredients/autocomplete?metaInformation=true&number=10&query=#{ingredient_name}",
               headers:{
                 "X-RapidAPI-Host" => "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
@@ -14,6 +14,6 @@ module Concerns::SpoonacularHelper
   end
 
   def create_ingredient(ingredient_hash)
-    Ingredient.find_or_create_by(name: ingredient["name"], id: ingredient["id"])
+    Ingredient.find_or_create_by(name: ingredient_hash["name"], id: ingredient_hash["id"])
   end
 end
