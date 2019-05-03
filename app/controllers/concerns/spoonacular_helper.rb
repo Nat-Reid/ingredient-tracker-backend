@@ -1,19 +1,41 @@
 module Concerns::SpoonacularHelper
   def ingredient_request(ingredient_name)
+    path = "food/ingredients/autocomplete?metaInformation=true&number=10&query=#{ingredient_name}"
+
     if (ingredient_name.match(/^[a-z ]+$/))
-      puts 'HITTING API HITTING API HITTING API'
-      response = Unirest.get "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/food/ingredients/autocomplete?metaInformation=true&number=10&query=#{ingredient_name}",
-              headers:{
-                "X-RapidAPI-Host" => "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
-                "X-RapidAPI-Key" => ENV["SPOONACULAR_KEY"]
-              }
-      {json: response.body.map{|ingredient| create_ingredient(ingredient)}, each_serialzer: IngredientSerializer}
+      response = unirest_get(path)
+      {json: create_ingredients(response), each_serialzer: IngredientSerializer}
     else
       {json: {message: "Only letters can be used"}, status: :bad_request}
     end
   end
 
-  def create_ingredient(ingredient_hash)
-    Ingredient.find_or_create_by(name: ingredient_hash["name"], id: ingredient_hash["id"])
+  def recipe_request(ingredient_list)
+    query = ingredient_list.map(&:name).join('%2C').gsub(" ","%20")
+    path = "/recipes/findByIngredients?number=5&limitLicense=true&ranking=-20&ignorePantry=false&ingredients=#{query}"
+
+    response = unirest_get(path)
+    # {json: create_recipes(response), each_serialzer: RecipeSerializer}
+  end
+
+  def create_ingredients(response)
+    response.body.map do |ingredient_hash|
+      Ingredient.find_or_create_by(name: ingredient_hash["name"], id: ingredient_hash["id"])
+    end
+  end
+
+  def unirest_get(path)
+    api_message
+    Unirest.get "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/#{path}",
+            headers:{
+              "X-RapidAPI-Host" => "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
+              "X-RapidAPI-Key" => ENV["SPOONACULAR_KEY"]
+            }
+  end
+
+  def api_message
+    5.times do
+      puts 'HITTING API HITTING API HITTING API'
+    end
   end
 end
