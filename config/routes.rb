@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
-  resources :user_ingredients
+  resources :user_ingredients, only: [:create, :index]
   # resources :ingredients
-  resources :recipes
-  resources :users
+  # resources :recipes
+  resources :users, only: [:create]
   post '/login', to: 'auth#login'
   get '/profile', to: 'users#profile'
   get '/find-ingredients/:ingredient_name', to: 'ingredients#find'

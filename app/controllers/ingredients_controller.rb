@@ -3,11 +3,6 @@ class IngredientsController < ApplicationController
 
   skip_before_action :authorized
 
-  def show
-    ingredient_request
-    render json: {message: "ingredient request made"}
-  end
-
   def find
     @matching_ingredients = Ingredient.where("ingredients.name  ~ ?", params[:ingredient_name].downcase)
     if @matching_ingredients.blank?
