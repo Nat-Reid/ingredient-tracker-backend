@@ -14,6 +14,14 @@ class UserIngredientsController < ApplicationController
     end
   end
 
+  def destroy
+    if @destroyed = UserIngredient.destroy(params[:id])
+      render json: @destroyed
+    else
+      render json: {message: "could not find that user ingredient"}, status: :not_found
+    end
+  end
+
   private
 
   def user_ingredient_params

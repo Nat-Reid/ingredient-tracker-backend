@@ -12,6 +12,7 @@ module Concerns::SpoonacularHelper
 
   def recipe_request(ingredient_list)
     query = ingredient_list.map(&:name).join('%2C').gsub(" ","%20")
+    puts "RECIPE QUERY:" + query
     path = "/recipes/findByIngredients?number=5&limitLicense=true&ranking=1&ignorePantry=false&ingredients=#{query}"
 
     response = unirest_get(path)
@@ -38,6 +39,7 @@ module Concerns::SpoonacularHelper
       end
       recipe
     end
+    puts "RECIPES FROM RESPONSE:" + recipes.map(&:name).to_s
     return recipes
   end
 
