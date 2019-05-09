@@ -6,5 +6,6 @@ Rails.application.routes.draw do
   post '/login', to: 'auth#login'
   get '/profile', to: 'users#profile'
   get '/find-ingredients/:ingredient_name', to: 'ingredients#find'
+  get '/generate-recipes', to: 'recipes#generate'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

@@ -15,13 +15,29 @@ module Concerns::SpoonacularHelper
     path = "/recipes/findByIngredients?number=5&limitLicense=true&ranking=-20&ignorePantry=false&ingredients=#{query}"
 
     response = unirest_get(path)
-    # {json: create_recipes(response), each_serialzer: RecipeSerializer}
+    {json: create_recipes(response), each_serialzer: RecipeSerializer}
   end
 
   def create_ingredients(response)
-    response.body.map do |ingredient_hash|
-      Ingredient.find_or_create_by(name: ingredient_hash["name"], id: ingredient_hash["id"])
+    response.body.map do |ingredient|
+      Ingredient.find_by(id: ingredient["id"]) || Ingredient.create(name: ingredient["name"], id: ingredient["id"])
     end
+  end
+
+  def create_recipes(response)
+    recipes = response.body.map do |recipe_hash|
+      recipe = Recipe.find_or_create_by(id: recipe_hash["id"], name: recipe_hash["title"])
+      recipe_hash["missedIngredients"].each do |i|
+        ingredient = Ingredient.find_by(id: i["id"]) || Ingredient.create(id: i["id"], name: i["name"])
+        recipe.ingredients << ingredient unless recipe.ingredient_ids.include?(ingredient.id)
+      end
+      recipe_hash["usedIngredients"].each do |i|
+        ingredient = Ingredient.find_by(id: i["id"]) || Ingredient.create(id: i["id"], name: i["name"])
+        recipe.ingredients << ingredient unless recipe.ingredient_ids.include?(ingredient.id)
+      end
+      recipe
+    end
+    return recipes
   end
 
   def unirest_get(path)
