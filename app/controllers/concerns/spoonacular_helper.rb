@@ -12,7 +12,7 @@ module Concerns::SpoonacularHelper
 
   def recipe_request(ingredient_list)
     query = ingredient_list.map(&:name).join('%2C').gsub(" ","%20")
-    path = "/recipes/findByIngredients?number=5&limitLicense=true&ranking=-20&ignorePantry=false&ingredients=#{query}"
+    path = "/recipes/findByIngredients?number=5&limitLicense=true&ranking=1&ignorePantry=false&ingredients=#{query}"
 
     response = unirest_get(path)
     {json: create_recipes(response), each_serialzer: RecipeSerializer}
@@ -27,6 +27,7 @@ module Concerns::SpoonacularHelper
   def create_recipes(response)
     recipes = response.body.map do |recipe_hash|
       recipe = Recipe.find_or_create_by(id: recipe_hash["id"], name: recipe_hash["title"])
+      recipe.url ||= unirest_get("recipes/#{recipe.id}/information").body["sourceUrl"]
       recipe_hash["missedIngredients"].each do |i|
         ingredient = Ingredient.find_by(id: i["id"]) || Ingredient.create(id: i["id"], name: i["name"])
         recipe.ingredients << ingredient unless recipe.ingredient_ids.include?(ingredient.id)
