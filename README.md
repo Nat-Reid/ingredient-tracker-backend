@@ -1,24 +1,6 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+##Ingredient Tracker API
 
-Things you may want to cover:
+Ingredient Tracker is a web app that Uses the [Spoonacular API](https://spoonacular.com/api) to track ingredients in your house, plan meals, and prevent food waste by tracking perishable ingredients.
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
